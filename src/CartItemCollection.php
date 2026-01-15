@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Cart;
 
+use Cart\Contracts\Buyable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
@@ -62,6 +64,60 @@ class CartItemCollection extends Collection
     public function groupByBuyableType(): Collection
     {
         return $this->groupBy(fn (CartItem $item) => $item->buyableType);
+    }
+
+    /**
+     * Batch load models for all items.
+     *
+     * Groups items by buyable type and uses whereIn for efficient loading,
+     * avoiding N+1 query problems when accessing item models.
+     */
+    public function loadModels(): void
+    {
+        if ($this->isEmpty()) {
+            return;
+        }
+
+        // Skip items that already have models loaded
+        $unloaded = $this->filter(fn (CartItem $item) => !$item->hasModelLoaded());
+
+        if ($unloaded->isEmpty()) {
+            return;
+        }
+
+        // Group by buyable type for batch loading
+        $grouped = $unloaded->groupByBuyableType();
+
+        foreach ($grouped as $buyableType => $items) {
+            $buyableTypeStr = (string) $buyableType;
+
+            if ($buyableTypeStr === '' || !class_exists($buyableTypeStr)) {
+                continue;
+            }
+
+            // Get unique IDs
+            $ids = $items->pluck('buyableId')->filter()->unique()->values()->all();
+
+            if (empty($ids)) {
+                continue;
+            }
+
+            // Batch load models using findMany (handles custom primary keys)
+            /** @var class-string<Buyable&Model> $buyableTypeStr */
+            $models = $buyableTypeStr::findMany($ids)->keyBy(
+                fn (Model $model): int|string => $model instanceof Buyable
+                    ? $model->getBuyableIdentifier()
+                    : $model->getKey()
+            );
+
+            // Assign models to items
+            foreach ($items as $item) {
+                $model = $models->get($item->buyableId);
+                if ($model !== null && $model instanceof Buyable) {
+                    $item->setModel($model);
+                }
+            }
+        }
     }
 
     /**

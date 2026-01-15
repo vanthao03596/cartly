@@ -73,6 +73,11 @@ class CartItem
     protected ?\Closure $priceResolutionCallback = null;
 
     /**
+     * Callback to trigger batch model loading.
+     */
+    protected ?\Closure $modelLoadingCallback = null;
+
+    /**
      * @param int|string $id The buyable identifier
      * @param int $quantity The quantity
      * @param array<string, mixed> $options Item options
@@ -159,6 +164,9 @@ class CartItem
 
     /**
      * Get the associated buyable model (lazy loaded).
+     *
+     * If a model loading callback is set, it will trigger batch loading
+     * for all cart items on first access, avoiding N+1 queries.
      */
     public function model(): ?Buyable
     {
@@ -166,6 +174,17 @@ class CartItem
             return $this->buyableModel;
         }
 
+        // Trigger batch loading if callback is set
+        if ($this->modelLoadingCallback !== null) {
+            ($this->modelLoadingCallback)();
+
+            // Check if model was loaded by batch
+            if ($this->buyableModel !== null) {
+                return $this->buyableModel;
+            }
+        }
+
+        // Fallback to individual query (for edge cases or when no callback)
         if ($this->buyableType === null) {
             return null;
         }
@@ -252,6 +271,24 @@ class CartItem
         $this->priceResolutionCallback = $callback;
 
         return $this;
+    }
+
+    /**
+     * Set the model loading callback.
+     */
+    public function setModelLoadingCallback(callable $callback): self
+    {
+        $this->modelLoadingCallback = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Check if the model has been loaded.
+     */
+    public function hasModelLoaded(): bool
+    {
+        return $this->buyableModel !== null;
     }
 
     /**

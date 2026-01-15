@@ -118,9 +118,6 @@ class CartInstance
             );
         }
 
-        // Set the price resolution callback
-        $cartItem->setPriceResolutionCallback(fn () => $this->resolvePrices());
-
         // Check if item already exists (same rowId) - if so, update quantity
         $isExistingItem = $content->items->hasRowId($cartItem->rowId);
         if ($isExistingItem) {
@@ -131,6 +128,10 @@ class CartInstance
         }
 
         // From here on, we're adding a NEW item
+        // Set callbacks only for new items (existing items already have them)
+        $cartItem->setPriceResolutionCallback(fn () => $this->resolvePrices());
+        $cartItem->setModelLoadingCallback(fn () => $this->loadModels());
+
         $instanceConfig = $this->getInstanceConfig();
 
         // Check max_items constraint (only for new items)
@@ -559,6 +560,17 @@ class CartInstance
     }
 
     /**
+     * Load models for all cart items (batch operation).
+     *
+     * This method batch-loads all buyable models in a single query per type,
+     * avoiding N+1 query problems when accessing item models.
+     */
+    public function loadModels(): void
+    {
+        $this->getContent()->items->loadModels();
+    }
+
+    /**
      * Set the storage driver.
      */
     public function setDriver(StorageDriver $driver): self
@@ -663,9 +675,10 @@ class CartInstance
             $this->content = $this->driver->get($this->instanceName, $this->identifier)
                 ?? new CartContent();
 
-            // Set price resolution callback on all items
+            // Set callbacks on all items
             foreach ($this->content->items as $item) {
                 $item->setPriceResolutionCallback(fn () => $this->resolvePrices());
+                $item->setModelLoadingCallback(fn () => $this->loadModels());
             }
         }
 

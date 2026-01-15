@@ -128,4 +128,24 @@ class CartItemTest extends TestCase
 
         $this->assertFalse($item->hasPriceResolved());
     }
+
+    public function test_it_tracks_model_loaded_state(): void
+    {
+        $item = new CartItem(id: 1);
+
+        $this->assertFalse($item->hasModelLoaded());
+    }
+
+    public function test_it_sets_model_loading_callback(): void
+    {
+        $item = new CartItem(id: 1);
+        $callbackTriggered = false;
+
+        $result = $item->setModelLoadingCallback(function () use (&$callbackTriggered) {
+            $callbackTriggered = true;
+        });
+
+        // Should return self for chaining
+        $this->assertSame($item, $result);
+    }
 }
