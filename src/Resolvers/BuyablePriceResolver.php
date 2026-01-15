@@ -85,7 +85,7 @@ class BuyablePriceResolver implements PriceResolver
             }
 
             /** @var class-string<Buyable&Model> $buyableTypeStr */
-            $models = $buyableTypeStr::whereIn('id', $ids)->get()->keyBy(
+            $models = $buyableTypeStr::findMany($ids)->keyBy(
                 fn (Model $model): int|string => $model instanceof Buyable ? $model->getBuyableIdentifier() : $model->getKey()
             );
 
