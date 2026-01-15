@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-01-15
+
+### Changed
+
+- **Performance**: Add batch model loading to eliminate N+1 queries when accessing buyable models
+- **Refactor**: Use `findMany()` instead of `whereIn('id')` for flexible primary key support in `BuyablePriceResolver`
+
 ## [1.0.0] - 2026-01-15
 
 ### Added
