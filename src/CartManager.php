@@ -7,9 +7,6 @@ namespace Cart;
 use Cart\Contracts\PriceResolver;
 use Cart\Contracts\StorageDriver;
 use Cart\Drivers\ArrayDriver;
-use Cart\Drivers\CacheDriver;
-use Cart\Drivers\DatabaseDriver;
-use Cart\Drivers\SessionDriver;
 use Cart\Events\CartMerged;
 use Cart\Events\CartMerging;
 use Cart\Resolvers\BuyablePriceResolver;
@@ -18,7 +15,6 @@ use Cart\Testing\CartFactory;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Session;
 use InvalidArgumentException;
 
 /**
@@ -169,11 +165,11 @@ class CartManager
         $strategy = config('cart.associate.merge_strategy', 'combine');
 
         // Get guest cart (from session)
-        $sessionDriver = new SessionDriver();
+        $sessionDriver = $this->resolveDriver('session');
         $guestContent = $sessionDriver->get($this->currentInstance);
 
         // Get user cart (from database)
-        $databaseDriver = new DatabaseDriver();
+        $databaseDriver = $this->resolveDriver('database');
         $userId = 'user_' . $user->getAuthIdentifier();
         $userContent = $databaseDriver->get($this->currentInstance, $userId);
 
@@ -390,13 +386,21 @@ class CartManager
      */
     protected function resolveDriver(string $name): StorageDriver
     {
-        return match ($name) {
-            'session' => new SessionDriver(),
-            'database' => new DatabaseDriver(),
-            'cache' => new CacheDriver(),
-            'array' => new ArrayDriver(),
-            default => throw new InvalidArgumentException("Unknown cart driver [{$name}]"),
-        };
+        $class = config("cart.drivers.{$name}.class");
+
+        if ($class === null) {
+            throw new InvalidArgumentException("Cart driver [{$name}] is not configured.");
+        }
+
+        if (!class_exists($class)) {
+            throw new InvalidArgumentException("Cart driver class [{$class}] does not exist.");
+        }
+
+        if (!is_subclass_of($class, StorageDriver::class)) {
+            throw new InvalidArgumentException("Cart driver [{$class}] must implement StorageDriver.");
+        }
+
+        return app($class);
     }
 
     /**

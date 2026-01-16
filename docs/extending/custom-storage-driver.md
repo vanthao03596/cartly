@@ -197,7 +197,29 @@ class FileDriver implements StorageDriver
 
 ## Registering the Driver
 
-### Method 1: Direct Usage
+### Method 1: Via Configuration (Recommended)
+
+The simplest way to register a custom driver is via configuration:
+
+```php
+// config/cart.php
+'driver' => env('CART_DRIVER', 'redis'),
+
+'drivers' => [
+    // ... existing drivers
+
+    'redis' => [
+        'class' => \App\Cart\Drivers\RedisDriver::class,
+        'prefix' => 'cart',
+        'ttl' => 60 * 60 * 24 * 7, // 7 days
+        'connection' => 'default',
+    ],
+],
+```
+
+The driver will be resolved via Laravel's container, so you can use dependency injection in your driver's constructor.
+
+### Method 2: Direct Usage
 
 ```php
 use App\Cart\Drivers\RedisDriver;
@@ -206,7 +228,7 @@ use Cart\Cart;
 Cart::setDriver(new RedisDriver());
 ```
 
-### Method 2: Service Provider
+### Method 3: Service Provider
 
 ```php
 <?php
@@ -231,7 +253,7 @@ class CartServiceProvider extends ServiceProvider
 }
 ```
 
-### Method 3: Extend CartManager
+### Method 4: Extend CartManager
 
 ```php
 // In a service provider
@@ -245,29 +267,6 @@ $this->app->extend(CartManager::class, function ($manager, $app) {
 
     return $manager;
 });
-```
-
-## Configuration
-
-Add your driver to the config:
-
-```php
-// config/cart.php
-'driver' => env('CART_DRIVER', 'redis'),
-
-'drivers' => [
-    // ... existing drivers
-
-    'redis' => [
-        'prefix' => 'cart',
-        'ttl' => 60 * 60 * 24 * 7, // 7 days
-        'connection' => 'default',
-    ],
-
-    'file' => [
-        'path' => storage_path('carts'),
-    ],
-],
 ```
 
 ## CartContent Serialization

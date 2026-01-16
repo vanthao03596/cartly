@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-01-16
+
+### Changed
+
+- **Breaking**: Driver configuration now requires `class` key in `config/cart.php`
+- **Architecture**: Driver resolution now uses Laravel container (`app()`) instead of hardcoded match statement
+- **Refactor**: `handleLogin()` now uses `resolveDriver()` instead of direct instantiation
+
+### Added
+
+- **Feature**: Custom storage drivers can now be registered via config without extending the package
+
+### Upgrade Notes
+
+If you have published the cart config, add the `class` key to each driver:
+
+```php
+'drivers' => [
+    'session' => [
+        'class' => \Cart\Drivers\SessionDriver::class, // Add this line
+        'key' => 'cart',
+    ],
+    // ... other drivers
+],
+```
+
 ## [1.0.1] - 2026-01-15
 
 ### Changed

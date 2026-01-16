@@ -33,21 +33,26 @@ return [
     */
     'drivers' => [
         'session' => [
+            'class' => \Cart\Drivers\SessionDriver::class,
             'key' => 'cart',
         ],
 
         'database' => [
+            'class' => \Cart\Drivers\DatabaseDriver::class,
             'table' => 'carts',
             'connection' => null,
         ],
 
         'cache' => [
+            'class' => \Cart\Drivers\CacheDriver::class,
             'store' => null,
             'prefix' => 'cart',
             'ttl' => 60 * 24 * 7, // 7 days in minutes
         ],
 
-        'array' => [],
+        'array' => [
+            'class' => \Cart\Drivers\ArrayDriver::class,
+        ],
     ],
 
     /*
