@@ -20,9 +20,9 @@ abstract class FixedCondition extends BaseCondition
     protected bool $negative = false;
 
     /**
-     * @param string $name Unique name for this condition
-     * @param int $amount The fixed amount in cents
-     * @param array<string, mixed> $attributes Additional attributes
+     * @param  string  $name  Unique name for this condition
+     * @param  int  $amount  The fixed amount in cents
+     * @param  array<string, mixed>  $attributes  Additional attributes
      */
     public function __construct(string $name, int $amount, array $attributes = [])
     {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Cart\CartInstance;
 use Cart\CartManager;
 
-if (!function_exists('cart')) {
+if (! function_exists('cart')) {
     /**
      * Get the cart manager or a specific instance.
      */
@@ -22,7 +22,7 @@ if (!function_exists('cart')) {
     }
 }
 
-if (!function_exists('cart_count')) {
+if (! function_exists('cart_count')) {
     /**
      * Get the total quantity of items in the cart.
      */
@@ -32,12 +32,12 @@ if (!function_exists('cart_count')) {
     }
 }
 
-if (!function_exists('cart_subtotal')) {
+if (! function_exists('cart_subtotal')) {
     /**
      * Get the cart subtotal.
      *
-     * @param string|null $instance Cart instance name
-     * @param bool $formatted Whether to return formatted string
+     * @param  string|null  $instance  Cart instance name
+     * @param  bool  $formatted  Whether to return formatted string
      * @return int|string Cents or formatted string
      */
     function cart_subtotal(?string $instance = null, bool $formatted = false): int|string
@@ -48,12 +48,12 @@ if (!function_exists('cart_subtotal')) {
     }
 }
 
-if (!function_exists('cart_total')) {
+if (! function_exists('cart_total')) {
     /**
      * Get the cart total.
      *
-     * @param string|null $instance Cart instance name
-     * @param bool $formatted Whether to return formatted string
+     * @param  string|null  $instance  Cart instance name
+     * @param  bool  $formatted  Whether to return formatted string
      * @return int|string Cents or formatted string
      */
     function cart_total(?string $instance = null, bool $formatted = false): int|string
@@ -64,12 +64,12 @@ if (!function_exists('cart_total')) {
     }
 }
 
-if (!function_exists('format_price')) {
+if (! function_exists('format_price')) {
     /**
      * Format a price in cents to a display string.
      *
-     * @param int $cents The price in cents
-     * @param string|null $currency Optional currency code
+     * @param  int  $cents  The price in cents
+     * @param  string|null  $currency  Optional currency code
      */
     function format_price(int $cents, ?string $currency = null): string
     {
@@ -87,14 +87,14 @@ if (!function_exists('format_price')) {
 
         // Apply currency symbol
         if ($currencyPosition === 'before') {
-            return $currencySymbol . $formatted;
+            return $currencySymbol.$formatted;
         }
 
-        return $formatted . $currencySymbol;
+        return $formatted.$currencySymbol;
     }
 }
 
-if (!function_exists('cents_to_dollars')) {
+if (! function_exists('cents_to_dollars')) {
     /**
      * Convert cents to dollars (for external APIs).
      */
@@ -104,7 +104,7 @@ if (!function_exists('cents_to_dollars')) {
     }
 }
 
-if (!function_exists('dollars_to_cents')) {
+if (! function_exists('dollars_to_cents')) {
     /**
      * Convert dollars to cents (from user input).
      */

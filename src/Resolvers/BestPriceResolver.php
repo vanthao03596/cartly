@@ -22,7 +22,7 @@ class BestPriceResolver implements PriceResolver
     protected array $resolvers;
 
     /**
-     * @param array<int, PriceResolver> $resolvers
+     * @param  array<int, PriceResolver>  $resolvers
      */
     public function __construct(array $resolvers = [])
     {
@@ -124,7 +124,7 @@ class BestPriceResolver implements PriceResolver
     /**
      * Select the best price (lowest) from a list of resolved prices.
      *
-     * @param array<int, ResolvedPrice> $prices
+     * @param  array<int, ResolvedPrice>  $prices
      */
     protected function selectBestPrice(array $prices): ResolvedPrice
     {

@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Auth;
 final class CartContext
 {
     /**
-     * @param Authenticatable|null $user The authenticated user
-     * @param string $instance The cart instance name
-     * @param string|null $currency Currency code (e.g., 'USD')
-     * @param string|null $locale Locale code (e.g., 'en_US')
-     * @param array<string, mixed> $meta Additional context metadata
+     * @param  Authenticatable|null  $user  The authenticated user
+     * @param  string  $instance  The cart instance name
+     * @param  string|null  $currency  Currency code (e.g., 'USD')
+     * @param  string|null  $locale  Locale code (e.g., 'en_US')
+     * @param  array<string, mixed>  $meta  Additional context metadata
      */
     public function __construct(
         public readonly ?Authenticatable $user = null,
@@ -69,7 +69,7 @@ final class CartContext
     /**
      * Create a new context with additional meta.
      *
-     * @param array<string, mixed> $meta
+     * @param  array<string, mixed>  $meta
      */
     public function withMeta(array $meta): self
     {

@@ -17,14 +17,14 @@ class BestPriceResolverTest extends TestCase
 {
     public function test_it_creates_empty_resolver(): void
     {
-        $resolver = new BestPriceResolver();
+        $resolver = new BestPriceResolver;
 
         $this->assertEmpty($resolver->getResolvers());
     }
 
     public function test_it_adds_resolvers(): void
     {
-        $resolver = new BestPriceResolver();
+        $resolver = new BestPriceResolver;
         $mockResolver = $this->createMock(PriceResolver::class);
 
         $resolver->add($mockResolver);
@@ -107,7 +107,7 @@ class BestPriceResolverTest extends TestCase
 
     public function test_it_returns_empty_array_for_empty_collection(): void
     {
-        $items = new CartItemCollection();
+        $items = new CartItemCollection;
         $context = $this->createContext();
 
         $best = new BestPriceResolver([$this->createFakeResolver(100)]);
@@ -141,7 +141,8 @@ class BestPriceResolverTest extends TestCase
 
     private function createFakeResolver(int $price): PriceResolver
     {
-        return new class($price) implements PriceResolver {
+        return new class($price) implements PriceResolver
+        {
             public function __construct(private int $price) {}
 
             public function resolve(CartItem $item, CartContext $context): ResolvedPrice
@@ -155,6 +156,7 @@ class BestPriceResolverTest extends TestCase
                 foreach ($items as $item) {
                     $results[$item->rowId] = new ResolvedPrice($this->price, $this->price);
                 }
+
                 return $results;
             }
         };
@@ -162,7 +164,8 @@ class BestPriceResolverTest extends TestCase
 
     private function createFailingResolver(): PriceResolver
     {
-        return new class implements PriceResolver {
+        return new class implements PriceResolver
+        {
             public function resolve(CartItem $item, CartContext $context): ResolvedPrice
             {
                 throw UnresolvablePriceException::forItem($item->rowId, null, null);

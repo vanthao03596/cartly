@@ -13,6 +13,7 @@ use Cart\Contracts\Priceable;
  * Implements both Buyable and Priceable interfaces.
  *
  * @mixin \Illuminate\Database\Eloquent\Model
+ *
  * @phpstan-ignore trait.unused
  */
 trait CanBeBought
@@ -39,7 +40,7 @@ trait CanBeBought
             }
         }
 
-        return static::class . ' #' . $this->getBuyableIdentifier();
+        return static::class.' #'.$this->getBuyableIdentifier();
     }
 
     /**

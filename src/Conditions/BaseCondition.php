@@ -39,8 +39,8 @@ abstract class BaseCondition implements Condition
     protected array $attributes = [];
 
     /**
-     * @param string $name Unique name for this condition
-     * @param array<string, mixed> $attributes Additional attributes
+     * @param  string  $name  Unique name for this condition
+     * @param  array<string, mixed>  $attributes  Additional attributes
      */
     public function __construct(string $name, array $attributes = [])
     {

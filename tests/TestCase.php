@@ -12,7 +12,7 @@ abstract class TestCase extends OrchestraTestCase
     /**
      * Get package providers.
      *
-     * @param \Illuminate\Foundation\Application $app
+     * @param  \Illuminate\Foundation\Application  $app
      * @return array<int, class-string>
      */
     protected function getPackageProviders($app): array
@@ -25,7 +25,7 @@ abstract class TestCase extends OrchestraTestCase
     /**
      * Get package aliases.
      *
-     * @param \Illuminate\Foundation\Application $app
+     * @param  \Illuminate\Foundation\Application  $app
      * @return array<string, class-string>
      */
     protected function getPackageAliases($app): array
@@ -38,7 +38,7 @@ abstract class TestCase extends OrchestraTestCase
     /**
      * Define environment setup.
      *
-     * @param \Illuminate\Foundation\Application $app
+     * @param  \Illuminate\Foundation\Application  $app
      */
     protected function defineEnvironment($app): void
     {
@@ -75,6 +75,6 @@ abstract class TestCase extends OrchestraTestCase
      */
     protected function defineDatabaseMigrations(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 }

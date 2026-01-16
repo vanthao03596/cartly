@@ -7,10 +7,10 @@ namespace Cart;
 final class ResolvedPrice
 {
     /**
-     * @param int $unitPrice Current unit price in cents
-     * @param int $originalPrice Original/regular price in cents
-     * @param string|null $priceSource Source of price: 'base', 'sale', 'tier', etc.
-     * @param array<string, mixed> $meta Additional metadata
+     * @param  int  $unitPrice  Current unit price in cents
+     * @param  int  $originalPrice  Original/regular price in cents
+     * @param  string|null  $priceSource  Source of price: 'base', 'sale', 'tier', etc.
+     * @param  array<string, mixed>  $meta  Additional metadata
      */
     public function __construct(
         public readonly int $unitPrice,
@@ -53,7 +53,7 @@ final class ResolvedPrice
     /**
      * Create from array (for deserialization).
      *
-     * @param array{unitPrice: int, originalPrice: int, priceSource?: string|null, meta?: array<string, mixed>} $data
+     * @param  array{unitPrice: int, originalPrice: int, priceSource?: string|null, meta?: array<string, mixed>}  $data
      */
     public static function fromArray(array $data): self
     {

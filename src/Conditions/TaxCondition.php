@@ -19,10 +19,10 @@ class TaxCondition extends PercentageCondition
     protected bool $includedInPrice = false;
 
     /**
-     * @param string $name Unique name for this tax (e.g., 'VAT', 'GST')
-     * @param float $rate The tax rate percentage (0-100)
-     * @param bool $includedInPrice Whether tax is already included in prices
-     * @param string $target The target: 'subtotal' or 'item'
+     * @param  string  $name  Unique name for this tax (e.g., 'VAT', 'GST')
+     * @param  float  $rate  The tax rate percentage (0-100)
+     * @param  bool  $includedInPrice  Whether tax is already included in prices
+     * @param  string  $target  The target: 'subtotal' or 'item'
      *
      * @throws \InvalidArgumentException If rate is not between 0 and 100
      */
@@ -89,7 +89,7 @@ class TaxCondition extends PercentageCondition
      */
     public function getSubtotalExcludingTax(int $totalCents): int
     {
-        if (!$this->includedInPrice) {
+        if (! $this->includedInPrice) {
             return $totalCents;
         }
 

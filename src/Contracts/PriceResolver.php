@@ -20,8 +20,6 @@ interface PriceResolver
      * Resolve prices for multiple cart items in batch.
      * Returns associative array where key is rowId.
      *
-     * @param CartItemCollection $items
-     * @param CartContext $context
      * @return array<string, ResolvedPrice>
      */
     public function resolveMany(CartItemCollection $items, CartContext $context): array;

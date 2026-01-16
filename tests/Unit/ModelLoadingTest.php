@@ -6,10 +6,10 @@ namespace Cart\Tests\Unit;
 
 use Cart\Cart;
 use Cart\CartContent;
+use Cart\CartContext;
 use Cart\CartInstance;
 use Cart\CartItem;
 use Cart\CartItemCollection;
-use Cart\CartContext;
 use Cart\Contracts\PriceResolver;
 use Cart\Drivers\ArrayDriver;
 use Cart\ResolvedPrice;
@@ -209,7 +209,7 @@ class ModelLoadingTest extends TestCase
 
     public function test_collection_load_models_handles_empty_collection(): void
     {
-        $collection = new CartItemCollection();
+        $collection = new CartItemCollection;
 
         DB::enableQueryLog();
         DB::flushQueryLog();
@@ -401,7 +401,8 @@ class ModelLoadingTest extends TestCase
         );
 
         // Create driver that returns our content
-        $driver = new class($content) extends ArrayDriver {
+        $driver = new class($content) extends ArrayDriver
+        {
             private CartContent $storedContent;
 
             public function __construct(CartContent $content)
@@ -439,7 +440,8 @@ class ModelLoadingTest extends TestCase
 
     private function createFakeResolver(int $price): PriceResolver
     {
-        return new class($price) implements PriceResolver {
+        return new class($price) implements PriceResolver
+        {
             public function __construct(private int $price) {}
 
             public function resolve(CartItem $item, CartContext $context): ResolvedPrice
@@ -453,6 +455,7 @@ class ModelLoadingTest extends TestCase
                 foreach ($items as $item) {
                     $results[$item->rowId] = new ResolvedPrice($this->price, $this->price);
                 }
+
                 return $results;
             }
         };

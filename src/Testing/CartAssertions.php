@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cart\Testing;
 
-use Cart\CartInstance;
 use Cart\Contracts\Condition;
 use PHPUnit\Framework\Assert;
 

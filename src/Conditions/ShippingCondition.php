@@ -19,9 +19,9 @@ class ShippingCondition extends FixedCondition
     protected ?int $freeShippingThreshold;
 
     /**
-     * @param string $name Unique name for this shipping option
-     * @param int $amount The shipping cost in cents
-     * @param int|null $freeShippingThreshold Order amount in cents for free shipping
+     * @param  string  $name  Unique name for this shipping option
+     * @param  int  $amount  The shipping cost in cents
+     * @param  int|null  $freeShippingThreshold  Order amount in cents for free shipping
      */
     public function __construct(
         string $name,

@@ -33,13 +33,13 @@ class CalculationPipeline
      */
     public static function make(): self
     {
-        return new self();
+        return new self;
     }
 
     /**
      * Set the conditions to apply.
      *
-     * @param Collection<string, Condition> $conditions
+     * @param  Collection<string, Condition>  $conditions
      */
     public function through(Collection $conditions): self
     {
@@ -54,7 +54,7 @@ class CalculationPipeline
      * Conditions are sorted by order (lower = first) and applied sequentially.
      * The result is guaranteed to be non-negative (minimum 0).
      *
-     * @param int $valueCents The starting value in cents
+     * @param  int  $valueCents  The starting value in cents
      * @return int The final value after all conditions applied, in cents
      */
     public function process(int $valueCents): int
@@ -142,7 +142,7 @@ class CalculationPipeline
      */
     public function hasProcessed(): bool
     {
-        return !empty($this->steps);
+        return ! empty($this->steps);
     }
 
     /**

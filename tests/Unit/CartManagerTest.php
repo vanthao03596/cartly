@@ -16,7 +16,7 @@ class CartManagerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->manager = new CartManager();
+        $this->manager = new CartManager;
         $this->manager->fake();
     }
 
@@ -122,7 +122,7 @@ class CartManagerTest extends TestCase
 
     public function test_it_sets_custom_driver(): void
     {
-        $driver = new ArrayDriver();
+        $driver = new ArrayDriver;
         $this->manager->setDriver($driver);
 
         $this->manager->fakeResolver(1000);

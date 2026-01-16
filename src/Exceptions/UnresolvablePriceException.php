@@ -32,7 +32,7 @@ class UnresolvablePriceException extends CartException
             $message .= " (type: {$buyableType}, id: {$buyableId})";
         }
 
-        $exception = new self($message . '.');
+        $exception = new self($message.'.');
         $exception->rowId = $rowId;
         $exception->buyableType = $buyableType;
         $exception->buyableId = $buyableId;

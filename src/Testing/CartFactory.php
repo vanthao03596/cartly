@@ -4,17 +4,13 @@ declare(strict_types=1);
 
 namespace Cart\Testing;
 
-use Cart\CartContent;
 use Cart\CartInstance;
 use Cart\CartItem;
-use Cart\CartItemCollection;
 use Cart\CartManager;
-use Cart\Contracts\Buyable;
 use Cart\Contracts\Condition;
 use Cart\Contracts\PriceResolver;
 use Cart\Drivers\ArrayDriver;
 use Cart\ResolvedPrice;
-use Illuminate\Support\Collection;
 
 /**
  * Factory for creating cart instances with predefined data for testing.
@@ -82,7 +78,7 @@ class CartFactory
      * - options: array (optional)
      * - meta: array (optional)
      *
-     * @param array<int, array{id: int|string, quantity: int, price: int, originalPrice?: int, options?: array<string, mixed>, meta?: array<string, mixed>}> $items
+     * @param  array<int, array{id: int|string, quantity: int, price: int, originalPrice?: int, options?: array<string, mixed>, meta?: array<string, mixed>}>  $items
      */
     public function withItems(array $items): self
     {
@@ -95,8 +91,8 @@ class CartFactory
     /**
      * Add a single item to the cart.
      *
-     * @param array<string, mixed> $options
-     * @param array<string, mixed> $meta
+     * @param  array<string, mixed>  $options
+     * @param  array<string, mixed>  $meta
      */
     public function withItem(
         int|string $id,
@@ -133,7 +129,7 @@ class CartFactory
     /**
      * Add multiple conditions to the cart.
      *
-     * @param array<int, Condition> $conditions
+     * @param  array<int, Condition>  $conditions
      */
     public function withConditions(array $conditions): self
     {
@@ -146,7 +142,7 @@ class CartFactory
     /**
      * Set cart metadata.
      *
-     * @param array<string, mixed> $meta
+     * @param  array<string, mixed>  $meta
      */
     public function withMeta(array $meta): self
     {
@@ -162,7 +158,7 @@ class CartFactory
     public function create(): CartInstance
     {
         // Create array driver for in-memory storage
-        $driver = new ArrayDriver();
+        $driver = new ArrayDriver;
 
         // Create a fake resolver that returns prices from our items config
         $resolver = $this->createFakeResolver();
@@ -208,9 +204,10 @@ class CartFactory
             ];
         }
 
-        return new class($itemPrices) implements PriceResolver {
+        return new class($itemPrices) implements PriceResolver
+        {
             /**
-             * @param array<int|string, array{price: int, originalPrice: int}> $prices
+             * @param  array<int|string, array{price: int, originalPrice: int}>  $prices
              */
             public function __construct(
                 protected array $prices,

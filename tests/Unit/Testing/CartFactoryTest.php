@@ -14,7 +14,7 @@ class CartFactoryTest extends TestCase
 {
     public function test_factory_creates_cart_instance(): void
     {
-        $factory = new CartFactory();
+        $factory = new CartFactory;
         $cart = $factory->create();
 
         $this->assertInstanceOf(CartInstance::class, $cart);
@@ -22,7 +22,7 @@ class CartFactoryTest extends TestCase
 
     public function test_factory_creates_empty_cart_by_default(): void
     {
-        $factory = new CartFactory();
+        $factory = new CartFactory;
         $cart = $factory->create();
 
         $this->assertTrue($cart->isEmpty());
@@ -31,7 +31,7 @@ class CartFactoryTest extends TestCase
 
     public function test_with_items_adds_items_to_cart(): void
     {
-        $factory = new CartFactory();
+        $factory = new CartFactory;
         $cart = $factory
             ->withItems([
                 ['id' => 1, 'quantity' => 2, 'price' => 1000],
@@ -45,7 +45,7 @@ class CartFactoryTest extends TestCase
 
     public function test_with_items_sets_correct_prices(): void
     {
-        $factory = new CartFactory();
+        $factory = new CartFactory;
         $cart = $factory
             ->withItems([
                 ['id' => 1, 'quantity' => 2, 'price' => 1000],
@@ -60,7 +60,7 @@ class CartFactoryTest extends TestCase
 
     public function test_with_item_adds_single_item(): void
     {
-        $factory = new CartFactory();
+        $factory = new CartFactory;
         $cart = $factory
             ->withItem(id: 42, quantity: 3, price: 1500)
             ->create();
@@ -71,7 +71,7 @@ class CartFactoryTest extends TestCase
 
     public function test_with_item_chaining_adds_multiple_items(): void
     {
-        $factory = new CartFactory();
+        $factory = new CartFactory;
         $cart = $factory
             ->withItem(id: 1, quantity: 1, price: 1000)
             ->withItem(id: 2, quantity: 2, price: 500)
@@ -85,7 +85,7 @@ class CartFactoryTest extends TestCase
 
     public function test_with_items_supports_original_price(): void
     {
-        $factory = new CartFactory();
+        $factory = new CartFactory;
         $cart = $factory
             ->withItems([
                 ['id' => 1, 'quantity' => 1, 'price' => 800, 'originalPrice' => 1000],
@@ -101,7 +101,7 @@ class CartFactoryTest extends TestCase
 
     public function test_with_items_supports_options(): void
     {
-        $factory = new CartFactory();
+        $factory = new CartFactory;
         $cart = $factory
             ->withItems([
                 ['id' => 1, 'quantity' => 1, 'price' => 1000, 'options' => ['size' => 'L', 'color' => 'red']],
@@ -116,7 +116,7 @@ class CartFactoryTest extends TestCase
 
     public function test_with_items_supports_meta(): void
     {
-        $factory = new CartFactory();
+        $factory = new CartFactory;
         $cart = $factory
             ->withItems([
                 ['id' => 1, 'quantity' => 1, 'price' => 1000, 'meta' => ['gift_wrap' => true]],
@@ -130,7 +130,7 @@ class CartFactoryTest extends TestCase
 
     public function test_with_condition_adds_condition_to_cart(): void
     {
-        $factory = new CartFactory();
+        $factory = new CartFactory;
         $cart = $factory
             ->withItems([
                 ['id' => 1, 'quantity' => 1, 'price' => 1000],
@@ -145,7 +145,7 @@ class CartFactoryTest extends TestCase
 
     public function test_with_conditions_adds_multiple_conditions(): void
     {
-        $factory = new CartFactory();
+        $factory = new CartFactory;
         $cart = $factory
             ->withItems([
                 ['id' => 1, 'quantity' => 1, 'price' => 1000],
@@ -162,7 +162,7 @@ class CartFactoryTest extends TestCase
 
     public function test_factory_is_immutable(): void
     {
-        $factory = new CartFactory();
+        $factory = new CartFactory;
         $factory1 = $factory->withItem(1, 1, 1000);
         $factory2 = $factory->withItem(2, 1, 2000);
 
@@ -179,7 +179,7 @@ class CartFactoryTest extends TestCase
 
     public function test_instance_sets_cart_instance_name(): void
     {
-        $factory = new CartFactory();
+        $factory = new CartFactory;
         $cart = $factory
             ->instance('wishlist')
             ->withItem(1, 1, 1000)
@@ -190,7 +190,7 @@ class CartFactoryTest extends TestCase
 
     public function test_complex_cart_scenario(): void
     {
-        $factory = new CartFactory();
+        $factory = new CartFactory;
         $cart = $factory
             ->withItems([
                 ['id' => 1, 'quantity' => 2, 'price' => 1000, 'originalPrice' => 1200],

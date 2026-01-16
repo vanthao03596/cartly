@@ -153,7 +153,7 @@ class CacheDriver implements StorageDriver
         $trackingKey = $this->getTrackingKey($identifier);
         $instances = $this->getTrackedInstances($identifier);
 
-        if (!in_array($instance, $instances, true)) {
+        if (! in_array($instance, $instances, true)) {
             $instances[] = $instance;
             $this->cache()->put($trackingKey, $instances, now()->addMinutes($this->ttl));
         }

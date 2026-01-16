@@ -13,6 +13,7 @@
     },
     "require-dev": {
         "larastan/larastan": "^2.0|^3.0",
+        "laravel/pint": "^1.27",
         "orchestra/testbench": "^8.0|^9.2|^10.0",
         "phpunit/phpunit": "^10.0|^11.0"
     },
@@ -43,7 +44,9 @@
         "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
         "analyse": "vendor/bin/phpstan analyse --memory-limit=2G",
-        "baseline": "vendor/bin/phpstan analyse --generate-baseline --memory-limit=2G"
+        "baseline": "vendor/bin/phpstan analyse --generate-baseline --memory-limit=2G",
+        "format": "vendor/bin/pint",
+        "format-test": "vendor/bin/pint --test"
     },
     "config": {
         "sort-packages": true

@@ -26,6 +26,7 @@ use InvalidArgumentException;
 class CartManager
 {
     use CartAssertions;
+
     /**
      * Active cart instances.
      *
@@ -89,7 +90,7 @@ class CartManager
         $name = $name ?? $this->currentInstance;
         $this->currentInstance = $name;
 
-        if (!isset($this->instances[$name])) {
+        if (! isset($this->instances[$name])) {
             $this->instances[$name] = $this->createInstance($name);
         }
 
@@ -156,7 +157,7 @@ class CartManager
      */
     public function handleLogin(Authenticatable $user): void
     {
-        if (!config('cart.associate.merge_on_login', true)) {
+        if (! config('cart.associate.merge_on_login', true)) {
             $this->associate($user);
 
             return;
@@ -170,7 +171,7 @@ class CartManager
 
         // Get user cart (from database)
         $databaseDriver = $this->resolveDriver('database');
-        $userId = 'user_' . $user->getAuthIdentifier();
+        $userId = 'user_'.$user->getAuthIdentifier();
         $userContent = $databaseDriver->get($this->currentInstance, $userId);
 
         // If no guest cart, just associate user
@@ -257,12 +258,12 @@ class CartManager
     /**
      * Enable fake mode for testing.
      *
-     * @param array{events?: bool}|null $options
+     * @param  array{events?: bool}|null  $options
      */
     public function fake(?array $options = null): self
     {
         $this->fakeMode = true;
-        $this->fakeDriver = new ArrayDriver();
+        $this->fakeDriver = new ArrayDriver;
         $this->fakeEventsEnabled = $options['events'] ?? true;
 
         // Clear existing instances so they get recreated with fake driver
@@ -274,7 +275,7 @@ class CartManager
     /**
      * Set a fake resolver for testing.
      *
-     * @param int|callable $resolver Fixed price in cents or callable
+     * @param  int|callable  $resolver  Fixed price in cents or callable
      */
     public function fakeResolver(int|callable $resolver): self
     {
@@ -286,7 +287,8 @@ class CartManager
             );
         }
 
-        $this->fakeResolver = new class($resolver) implements PriceResolver {
+        $this->fakeResolver = new class($resolver) implements PriceResolver
+        {
             public function __construct(
                 protected \Closure $callback,
             ) {}
@@ -325,7 +327,7 @@ class CartManager
     /**
      * Proxy method calls to the current instance.
      *
-     * @param array<int, mixed> $arguments
+     * @param  array<int, mixed>  $arguments
      */
     public function __call(string $method, array $arguments): mixed
     {
@@ -392,11 +394,11 @@ class CartManager
             throw new InvalidArgumentException("Cart driver [{$name}] is not configured.");
         }
 
-        if (!class_exists($class)) {
+        if (! class_exists($class)) {
             throw new InvalidArgumentException("Cart driver class [{$class}] does not exist.");
         }
 
-        if (!is_subclass_of($class, StorageDriver::class)) {
+        if (! is_subclass_of($class, StorageDriver::class)) {
             throw new InvalidArgumentException("Cart driver [{$class}] must implement StorageDriver.");
         }
 
@@ -419,10 +421,10 @@ class CartManager
         $resolverClass = config('cart.price_resolver');
 
         if ($resolverClass !== null && class_exists($resolverClass)) {
-            return new $resolverClass();
+            return new $resolverClass;
         }
 
-        return new BuyablePriceResolver();
+        return new BuyablePriceResolver;
     }
 
     /**

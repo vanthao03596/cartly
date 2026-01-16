@@ -30,7 +30,7 @@ interface Condition
     /**
      * Calculate and return the new value after applying the condition.
      *
-     * @param int $valueCents The input value in cents
+     * @param  int  $valueCents  The input value in cents
      * @return int The resulting value in cents after condition is applied
      */
     public function calculate(int $valueCents): int;
@@ -38,7 +38,7 @@ interface Condition
     /**
      * Get the calculated adjustment value (positive or negative).
      *
-     * @param int $baseValueCents The base value to calculate against
+     * @param  int  $baseValueCents  The base value to calculate against
      * @return int The adjustment amount in cents (can be negative for discounts)
      */
     public function getCalculatedValue(int $baseValueCents): int;
@@ -53,7 +53,7 @@ interface Condition
     /**
      * Create a condition instance from an array.
      *
-     * @param array{class?: string, name: string, type?: string, target?: string, order?: int, attributes?: array<string, mixed>} $data
+     * @param  array{class?: string, name: string, type?: string, target?: string, order?: int, attributes?: array<string, mixed>}  $data
      */
     public static function fromArray(array $data): static;
 }

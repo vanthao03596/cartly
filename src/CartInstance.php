@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cart;
 
+use Cart\Conditions\TaxCondition;
 use Cart\Contracts\Buyable;
 use Cart\Contracts\Condition;
 use Cart\Contracts\PriceResolver;
@@ -18,12 +19,11 @@ use Cart\Events\CartItemRemoved;
 use Cart\Events\CartItemRemoving;
 use Cart\Events\CartItemUpdated;
 use Cart\Events\CartItemUpdating;
-use Cart\Conditions\TaxCondition;
-use Cart\Support\CalculationPipeline;
 use Cart\Exceptions\DuplicateItemException;
 use Cart\Exceptions\InvalidQuantityException;
 use Cart\Exceptions\InvalidRowIdException;
 use Cart\Exceptions\MaxItemsExceededException;
+use Cart\Support\CalculationPipeline;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
@@ -88,10 +88,10 @@ class CartInstance
     /**
      * Add an item to the cart.
      *
-     * @param Buyable|int|string $item The buyable model or ID
-     * @param int $quantity The quantity to add
-     * @param array<string, mixed> $options Item options
-     * @param array<string, mixed> $meta Item metadata
+     * @param  Buyable|int|string  $item  The buyable model or ID
+     * @param  int  $quantity  The quantity to add
+     * @param  array<string, mixed>  $options  Item options
+     * @param  array<string, mixed>  $meta  Item metadata
      */
     public function add(
         Buyable|int|string $item,
@@ -146,7 +146,7 @@ class CartInstance
 
         // Check allow_duplicates constraint (only for new items)
         $allowDuplicates = $instanceConfig['allow_duplicates'] ?? true;
-        if (!$allowDuplicates) {
+        if (! $allowDuplicates) {
             $buyableId = $cartItem->buyableId;
             $existingItem = $content->items->findByBuyableId($buyableId);
 
@@ -184,14 +184,14 @@ class CartInstance
     /**
      * Update a cart item.
      *
-     * @param string $rowId The row ID
-     * @param int|array<string, mixed> $attributes Quantity or array of attributes
+     * @param  string  $rowId  The row ID
+     * @param  int|array<string, mixed>  $attributes  Quantity or array of attributes
      */
     public function update(string $rowId, int|array $attributes): CartItem
     {
         $content = $this->getContent();
 
-        if (!$content->items->hasRowId($rowId)) {
+        if (! $content->items->hasRowId($rowId)) {
             throw InvalidRowIdException::forRowId($rowId);
         }
 
@@ -246,7 +246,7 @@ class CartInstance
     {
         $content = $this->getContent();
 
-        if (!$content->items->hasRowId($rowId)) {
+        if (! $content->items->hasRowId($rowId)) {
             throw InvalidRowIdException::forRowId($rowId);
         }
 
@@ -531,7 +531,7 @@ class CartInstance
         $itemCount = $content->countItems();
 
         // Clear items
-        $content->items = new CartItemCollection();
+        $content->items = new CartItemCollection;
         $this->invalidatePriceCache();
         $this->saveContent();
 
@@ -598,7 +598,7 @@ class CartInstance
     public function associate(Authenticatable $user): self
     {
         $this->user = $user;
-        $this->identifier = 'user_' . $user->getAuthIdentifier();
+        $this->identifier = 'user_'.$user->getAuthIdentifier();
         $this->content = null; // Reload content for new identifier
 
         return $this;
@@ -673,7 +673,7 @@ class CartInstance
     {
         if ($this->content === null) {
             $this->content = $this->driver->get($this->instanceName, $this->identifier)
-                ?? new CartContent();
+                ?? new CartContent;
 
             // Set callbacks on all items
             foreach ($this->content->items as $item) {
@@ -715,7 +715,7 @@ class CartInstance
         }
 
         // Collect unresolved items
-        $unresolved = $content->items->filter(fn (CartItem $item) => !$item->hasPriceResolved());
+        $unresolved = $content->items->filter(fn (CartItem $item) => ! $item->hasPriceResolved());
 
         if ($unresolved->isEmpty()) {
             $this->pricesResolved = true;
@@ -789,7 +789,7 @@ class CartInstance
 
         // 1. Add instance conditions from config (if not already exists)
         foreach ($this->getInstanceConditions() as $condition) {
-            if (!$conditions->has($condition->getName())) {
+            if (! $conditions->has($condition->getName())) {
                 $conditions->put($condition->getName(), $condition);
             }
         }
@@ -798,7 +798,7 @@ class CartInstance
         $configTax = $this->getConfigTaxCondition();
         if ($configTax !== null) {
             $hasManualTax = $conditions->contains(fn (Condition $c) => $c->getType() === 'tax');
-            if (!$hasManualTax) {
+            if (! $hasManualTax) {
                 $conditions->put($configTax->getName(), $configTax);
             }
         }
@@ -836,21 +836,21 @@ class CartInstance
     /**
      * Create a condition instance from config array.
      *
-     * @param array<string, mixed> $config
+     * @param  array<string, mixed>  $config
      */
     protected function createConditionFromConfig(array $config): ?Condition
     {
-        if (!isset($config['class']) || !is_string($config['class']) || !isset($config['name'])) {
+        if (! isset($config['class']) || ! is_string($config['class']) || ! isset($config['name'])) {
             return null;
         }
 
         $class = $config['class'];
 
-        if (!class_exists($class)) {
+        if (! class_exists($class)) {
             return null;
         }
 
-        if (!is_subclass_of($class, Condition::class)) {
+        if (! is_subclass_of($class, Condition::class)) {
             return null;
         }
 
@@ -891,7 +891,7 @@ class CartInstance
         $taxEnabled = config('cart.tax.enabled', false);
         $taxRate = (float) config('cart.tax.rate', 0);
 
-        if (!$taxEnabled || $taxRate <= 0 || $taxRate > 100) {
+        if (! $taxEnabled || $taxRate <= 0 || $taxRate > 100) {
             return null;
         }
 

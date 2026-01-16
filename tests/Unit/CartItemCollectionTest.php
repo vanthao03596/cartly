@@ -12,7 +12,7 @@ class CartItemCollectionTest extends TestCase
 {
     public function test_it_creates_empty_collection(): void
     {
-        $collection = new CartItemCollection();
+        $collection = new CartItemCollection;
 
         $this->assertTrue($collection->isEmpty());
     }
@@ -29,7 +29,7 @@ class CartItemCollectionTest extends TestCase
 
     public function test_it_returns_null_for_nonexistent_row_id(): void
     {
-        $collection = new CartItemCollection();
+        $collection = new CartItemCollection;
 
         $found = $collection->find('nonexistent');
 
@@ -91,7 +91,7 @@ class CartItemCollectionTest extends TestCase
 
     public function test_it_returns_zero_quantity_for_empty_collection(): void
     {
-        $collection = new CartItemCollection();
+        $collection = new CartItemCollection;
 
         $this->assertSame(0, $collection->totalQuantity());
     }

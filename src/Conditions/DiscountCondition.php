@@ -34,12 +34,12 @@ class DiscountCondition extends BaseCondition
     protected ?int $minOrderAmount;
 
     /**
-     * @param string $name Unique name for this discount
-     * @param float|int $value The discount value (percentage 0-100 or fixed cents)
-     * @param string $mode 'percentage' or 'fixed'
-     * @param string $target 'subtotal' or 'item'
-     * @param int|null $maxAmount Maximum discount in cents (percentage only)
-     * @param int|null $minOrderAmount Minimum order for discount to apply
+     * @param  string  $name  Unique name for this discount
+     * @param  float|int  $value  The discount value (percentage 0-100 or fixed cents)
+     * @param  string  $mode  'percentage' or 'fixed'
+     * @param  string  $target  'subtotal' or 'item'
+     * @param  int|null  $maxAmount  Maximum discount in cents (percentage only)
+     * @param  int|null  $minOrderAmount  Minimum order for discount to apply
      *
      * @throws \InvalidArgumentException If value is invalid for the mode
      */
@@ -59,7 +59,7 @@ class DiscountCondition extends BaseCondition
             throw new \InvalidArgumentException("Percentage discount cannot exceed 100. Got: {$value}");
         }
 
-        if (!in_array($mode, ['percentage', 'fixed'], true)) {
+        if (! in_array($mode, ['percentage', 'fixed'], true)) {
             throw new \InvalidArgumentException("Invalid discount mode. Expected 'percentage' or 'fixed', got: {$mode}");
         }
 

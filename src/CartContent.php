@@ -29,16 +29,15 @@ class CartContent
     public array $meta;
 
     /**
-     * @param CartItemCollection|null $items
-     * @param Collection<string, Condition>|null $conditions
-     * @param array<string, mixed> $meta
+     * @param  Collection<string, Condition>|null  $conditions
+     * @param  array<string, mixed>  $meta
      */
     public function __construct(
         ?CartItemCollection $items = null,
         ?Collection $conditions = null,
         array $meta = [],
     ) {
-        $this->items = $items ?? new CartItemCollection();
+        $this->items = $items ?? new CartItemCollection;
         $this->conditions = $conditions ?? collect();
         $this->meta = $meta;
     }
@@ -142,7 +141,7 @@ class CartContent
     /**
      * Create from array (deserialization).
      *
-     * @param array{items?: array<int, array<string, mixed>>, conditions?: array<int, array<string, mixed>>, meta?: array<string, mixed>} $data
+     * @param  array{items?: array<int, array<string, mixed>>, conditions?: array<int, array<string, mixed>>, meta?: array<string, mixed>}  $data
      */
     public static function fromArray(array $data): self
     {
@@ -200,7 +199,7 @@ class CartContent
     public static function fromJson(string $json): self
     {
         if ($json === '' || $json === '{}' || $json === '[]') {
-            return new self();
+            return new self;
         }
 
         try {
@@ -211,13 +210,13 @@ class CartContent
                 'json_preview' => substr($json, 0, 100),
             ]);
 
-            return new self();
+            return new self;
         }
 
-        if (!is_array($data)) {
+        if (! is_array($data)) {
             \Illuminate\Support\Facades\Log::warning('Cart: Decoded JSON is not an array');
 
-            return new self();
+            return new self;
         }
 
         return self::fromArray($data);

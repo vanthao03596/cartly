@@ -74,7 +74,7 @@ class SessionDriver implements StorageDriver
         $allSession = Session::all();
 
         foreach (array_keys($allSession) as $key) {
-            if (str_starts_with((string) $key, $this->key . '.')) {
+            if (str_starts_with((string) $key, $this->key.'.')) {
                 Session::forget($key);
             }
         }

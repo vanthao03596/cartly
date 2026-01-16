@@ -20,9 +20,9 @@ abstract class PercentageCondition extends BaseCondition
     protected bool $negative = false;
 
     /**
-     * @param string $name Unique name for this condition
-     * @param float $rate The percentage rate (0-100)
-     * @param array<string, mixed> $attributes Additional attributes
+     * @param  string  $name  Unique name for this condition
+     * @param  float  $rate  The percentage rate (0-100)
+     * @param  array<string, mixed>  $attributes  Additional attributes
      *
      * @throws \InvalidArgumentException If rate is negative
      */

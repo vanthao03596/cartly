@@ -79,7 +79,7 @@ class CartItemCollection extends Collection
         }
 
         // Skip items that already have models loaded
-        $unloaded = $this->filter(fn (CartItem $item) => !$item->hasModelLoaded());
+        $unloaded = $this->filter(fn (CartItem $item) => ! $item->hasModelLoaded());
 
         if ($unloaded->isEmpty()) {
             return;
@@ -91,7 +91,7 @@ class CartItemCollection extends Collection
         foreach ($grouped as $buyableType => $items) {
             $buyableTypeStr = (string) $buyableType;
 
-            if ($buyableTypeStr === '' || !class_exists($buyableTypeStr)) {
+            if ($buyableTypeStr === '' || ! class_exists($buyableTypeStr)) {
                 continue;
             }
 
@@ -123,11 +123,11 @@ class CartItemCollection extends Collection
     /**
      * Create from array of item data.
      *
-     * @param array<int|string, array<string, mixed>> $items
+     * @param  array<int|string, array<string, mixed>>  $items
      */
     public static function fromArray(array $items): self
     {
-        $collection = new self();
+        $collection = new self;
 
         foreach ($items as $data) {
             $item = CartItem::fromArray($data);

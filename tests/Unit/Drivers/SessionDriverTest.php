@@ -9,7 +9,6 @@ use Cart\CartItem;
 use Cart\CartItemCollection;
 use Cart\Drivers\SessionDriver;
 use Cart\Tests\TestCase;
-use Illuminate\Support\Facades\Session;
 
 class SessionDriverTest extends TestCase
 {
@@ -18,7 +17,7 @@ class SessionDriverTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->driver = new SessionDriver();
+        $this->driver = new SessionDriver;
     }
 
     public function test_it_returns_null_for_nonexistent_cart(): void
@@ -42,7 +41,7 @@ class SessionDriverTest extends TestCase
     public function test_it_stores_multiple_instances(): void
     {
         $cart = $this->createContent();
-        $wishlist = new CartContent();
+        $wishlist = new CartContent;
 
         $this->driver->put('default', $cart);
         $this->driver->put('wishlist', $wishlist);
@@ -54,7 +53,7 @@ class SessionDriverTest extends TestCase
     public function test_it_forgets_specific_instance(): void
     {
         $cart = $this->createContent();
-        $wishlist = new CartContent();
+        $wishlist = new CartContent;
 
         $this->driver->put('default', $cart);
         $this->driver->put('wishlist', $wishlist);
@@ -68,7 +67,7 @@ class SessionDriverTest extends TestCase
     public function test_it_flushes_cart_instances_by_forgetting_each(): void
     {
         $this->driver->put('default', $this->createContent());
-        $this->driver->put('wishlist', new CartContent());
+        $this->driver->put('wishlist', new CartContent);
 
         // Flush works by forgetting each known instance
         $this->driver->forget('default');
@@ -91,7 +90,7 @@ class SessionDriverTest extends TestCase
 
     private function createContent(): CartContent
     {
-        $items = new CartItemCollection();
+        $items = new CartItemCollection;
         $item = new CartItem(id: 1, quantity: 1);
         $items->put($item->rowId, $item);
 

@@ -78,12 +78,12 @@ class CartItem
     protected ?\Closure $modelLoadingCallback = null;
 
     /**
-     * @param int|string $id The buyable identifier
-     * @param int $quantity The quantity
-     * @param array<string, mixed> $options Item options
-     * @param string|null $buyableType The buyable model class
-     * @param int|string|null $buyableId The buyable model ID
-     * @param array<string, mixed> $meta Custom metadata
+     * @param  int|string  $id  The buyable identifier
+     * @param  int  $quantity  The quantity
+     * @param  array<string, mixed>  $options  Item options
+     * @param  string|null  $buyableType  The buyable model class
+     * @param  int|string|null  $buyableId  The buyable model ID
+     * @param  array<string, mixed>  $meta  Custom metadata
      */
     public function __construct(
         int|string $id,
@@ -106,8 +106,8 @@ class CartItem
     /**
      * Create a CartItem from a Buyable model.
      *
-     * @param array<string, mixed> $options
-     * @param array<string, mixed> $meta
+     * @param  array<string, mixed>  $options
+     * @param  array<string, mixed>  $meta
      */
     public static function fromBuyable(Buyable $buyable, int $quantity = 1, array $options = [], array $meta = []): self
     {
@@ -124,7 +124,7 @@ class CartItem
     /**
      * Create from an array (for deserialization).
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public static function fromArray(array $data): self
     {
@@ -159,7 +159,7 @@ class CartItem
     {
         $sorted = $this->options->sortKeys()->toArray();
 
-        return hash('xxh128', $this->id . json_encode($sorted));
+        return hash('xxh128', $this->id.json_encode($sorted));
     }
 
     /**
@@ -189,7 +189,7 @@ class CartItem
             return null;
         }
 
-        if (!class_exists($this->buyableType)) {
+        if (! class_exists($this->buyableType)) {
             return null;
         }
 

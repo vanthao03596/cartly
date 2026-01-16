@@ -36,7 +36,7 @@ class ArrayDriver implements StorageDriver
     {
         $identifier = $identifier ?? 'default';
 
-        if (!isset($this->storage[$identifier])) {
+        if (! isset($this->storage[$identifier])) {
             $this->storage[$identifier] = [];
         }
 

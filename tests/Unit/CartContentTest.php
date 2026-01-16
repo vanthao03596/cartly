@@ -14,7 +14,7 @@ class CartContentTest extends TestCase
 {
     public function test_it_creates_empty_content(): void
     {
-        $content = new CartContent();
+        $content = new CartContent;
 
         $this->assertTrue($content->isEmpty());
         $this->assertFalse($content->isNotEmpty());
@@ -23,7 +23,7 @@ class CartContentTest extends TestCase
 
     public function test_it_creates_content_with_items(): void
     {
-        $items = new CartItemCollection();
+        $items = new CartItemCollection;
         $item = new CartItem(id: 1, quantity: 2);
         $items->put($item->rowId, $item);
 
@@ -37,7 +37,7 @@ class CartContentTest extends TestCase
 
     public function test_it_manages_conditions(): void
     {
-        $content = new CartContent();
+        $content = new CartContent;
         $tax = new TaxCondition('VAT', 10);
 
         $content->addCondition($tax);
@@ -48,7 +48,7 @@ class CartContentTest extends TestCase
 
     public function test_it_removes_conditions(): void
     {
-        $content = new CartContent();
+        $content = new CartContent;
         $tax = new TaxCondition('VAT', 10);
 
         $content->addCondition($tax);
@@ -59,7 +59,7 @@ class CartContentTest extends TestCase
 
     public function test_it_clears_conditions(): void
     {
-        $content = new CartContent();
+        $content = new CartContent;
         $content->addCondition(new TaxCondition('VAT', 10));
         $content->addCondition(new TaxCondition('GST', 5));
 
@@ -70,7 +70,7 @@ class CartContentTest extends TestCase
 
     public function test_it_manages_meta(): void
     {
-        $content = new CartContent();
+        $content = new CartContent;
 
         $content->setMeta('coupon', 'SAVE10');
 
@@ -81,7 +81,7 @@ class CartContentTest extends TestCase
 
     public function test_it_serializes_to_array(): void
     {
-        $items = new CartItemCollection();
+        $items = new CartItemCollection;
         $item = new CartItem(id: 1, quantity: 2);
         $items->put($item->rowId, $item);
 

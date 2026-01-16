@@ -18,7 +18,7 @@ class CartAssertionsTest extends TestCase
     {
         parent::setUp();
 
-        $this->cart = new CartManager();
+        $this->cart = new CartManager;
         $this->cart->fake();
         $this->cart->fakeResolver(1000); // $10.00 per item
     }

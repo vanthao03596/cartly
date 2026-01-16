@@ -34,7 +34,7 @@ class BuyablePriceResolver implements PriceResolver
             );
         }
 
-        if (!$model instanceof Priceable) {
+        if (! $model instanceof Priceable) {
             throw UnresolvablePriceException::notPriceable(
                 $item->rowId,
                 $item->buyableType ?? get_class($model)
@@ -64,7 +64,7 @@ class BuyablePriceResolver implements PriceResolver
 
         foreach ($grouped as $buyableType => $typeItems) {
             $buyableTypeStr = (string) $buyableType;
-            if (!class_exists($buyableTypeStr)) {
+            if (! class_exists($buyableTypeStr)) {
                 // Handle items without valid buyable type
                 foreach ($typeItems as $item) {
                     throw UnresolvablePriceException::forItem(
@@ -101,7 +101,7 @@ class BuyablePriceResolver implements PriceResolver
                     );
                 }
 
-                if (!$model instanceof Priceable) {
+                if (! $model instanceof Priceable) {
                     throw UnresolvablePriceException::notPriceable(
                         $item->rowId,
                         $buyableTypeStr

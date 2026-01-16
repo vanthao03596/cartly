@@ -15,9 +15,9 @@ class CartItemUpdated
     use Dispatchable;
 
     /**
-     * @param string $instance The cart instance name
-     * @param CartItem $item The updated item
-     * @param array<string, mixed> $changes The changes that were applied
+     * @param  string  $instance  The cart instance name
+     * @param  CartItem  $item  The updated item
+     * @param  array<string, mixed>  $changes  The changes that were applied
      */
     public function __construct(
         public readonly string $instance,

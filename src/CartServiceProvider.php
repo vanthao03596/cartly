@@ -21,13 +21,13 @@ class CartServiceProvider extends ServiceProvider
     {
         // Merge config
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/cart.php',
+            __DIR__.'/../config/cart.php',
             'cart'
         );
 
         // Register CartManager as singleton
         $this->app->singleton(CartManager::class, function () {
-            return new CartManager();
+            return new CartManager;
         });
 
         // Alias for easier access
@@ -38,11 +38,11 @@ class CartServiceProvider extends ServiceProvider
             $driver = config('cart.driver', 'session');
 
             return match ($driver) {
-                'session' => new Drivers\SessionDriver(),
-                'database' => new Drivers\DatabaseDriver(),
-                'cache' => new Drivers\CacheDriver(),
-                'array' => new Drivers\ArrayDriver(),
-                default => new SessionDriver(),
+                'session' => new Drivers\SessionDriver,
+                'database' => new Drivers\DatabaseDriver,
+                'cache' => new Drivers\CacheDriver,
+                'array' => new Drivers\ArrayDriver,
+                default => new SessionDriver,
             };
         });
 
@@ -50,10 +50,10 @@ class CartServiceProvider extends ServiceProvider
             $resolverClass = config('cart.price_resolver');
 
             if ($resolverClass !== null && class_exists($resolverClass)) {
-                return new $resolverClass();
+                return new $resolverClass;
             }
 
-            return new BuyablePriceResolver();
+            return new BuyablePriceResolver;
         });
     }
 
@@ -64,12 +64,12 @@ class CartServiceProvider extends ServiceProvider
     {
         // Publish config
         $this->publishes([
-            __DIR__ . '/../config/cart.php' => config_path('cart.php'),
+            __DIR__.'/../config/cart.php' => config_path('cart.php'),
         ], 'cart-config');
 
         // Publish migrations
         $this->publishes([
-            __DIR__ . '/../database/migrations/' => database_path('migrations'),
+            __DIR__.'/../database/migrations/' => database_path('migrations'),
         ], 'cart-migrations');
 
         // Register login event listener for cart merge
@@ -81,7 +81,7 @@ class CartServiceProvider extends ServiceProvider
      */
     protected function registerLoginListener(): void
     {
-        if (!config('cart.associate.merge_on_login', true)) {
+        if (! config('cart.associate.merge_on_login', true)) {
             return;
         }
 

@@ -22,7 +22,7 @@ class ChainPriceResolver implements PriceResolver
     protected array $resolvers;
 
     /**
-     * @param array<int, PriceResolver> $resolvers
+     * @param  array<int, PriceResolver>  $resolvers
      */
     public function __construct(array $resolvers = [])
     {

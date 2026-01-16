@@ -17,14 +17,14 @@ class ChainPriceResolverTest extends TestCase
 {
     public function test_it_creates_empty_chain(): void
     {
-        $resolver = new ChainPriceResolver();
+        $resolver = new ChainPriceResolver;
 
         $this->assertEmpty($resolver->getResolvers());
     }
 
     public function test_it_adds_resolvers(): void
     {
-        $resolver = new ChainPriceResolver();
+        $resolver = new ChainPriceResolver;
         $mockResolver = $this->createMock(PriceResolver::class);
 
         $resolver->add($mockResolver);
@@ -104,7 +104,7 @@ class ChainPriceResolverTest extends TestCase
 
     public function test_it_returns_empty_array_for_empty_collection(): void
     {
-        $items = new CartItemCollection();
+        $items = new CartItemCollection;
         $context = $this->createContext();
 
         $chain = new ChainPriceResolver([$this->createFakeResolver(100)]);
@@ -125,7 +125,8 @@ class ChainPriceResolverTest extends TestCase
 
     private function createFakeResolver(int $price): PriceResolver
     {
-        return new class($price) implements PriceResolver {
+        return new class($price) implements PriceResolver
+        {
             public function __construct(private int $price) {}
 
             public function resolve(CartItem $item, CartContext $context): ResolvedPrice
@@ -139,6 +140,7 @@ class ChainPriceResolverTest extends TestCase
                 foreach ($items as $item) {
                     $results[$item->rowId] = new ResolvedPrice($this->price, $this->price);
                 }
+
                 return $results;
             }
         };
@@ -146,7 +148,8 @@ class ChainPriceResolverTest extends TestCase
 
     private function createFailingResolver(): PriceResolver
     {
-        return new class implements PriceResolver {
+        return new class implements PriceResolver
+        {
             public function resolve(CartItem $item, CartContext $context): ResolvedPrice
             {
                 throw UnresolvablePriceException::forItem($item->rowId, null, null);

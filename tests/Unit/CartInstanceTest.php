@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Cart\Tests\Unit;
 
+use Cart\CartContext;
 use Cart\CartInstance;
 use Cart\CartItem;
-use Cart\CartContext;
 use Cart\CartItemCollection;
 use Cart\Contracts\PriceResolver;
 use Cart\Drivers\ArrayDriver;
@@ -14,20 +14,22 @@ use Cart\Exceptions\InvalidQuantityException;
 use Cart\Exceptions\InvalidRowIdException;
 use Cart\Exceptions\MaxItemsExceededException;
 use Cart\ResolvedPrice;
-use Illuminate\Support\Facades\Config;
 use Cart\Tests\TestCase;
+use Illuminate\Support\Facades\Config;
 
 class CartInstanceTest extends TestCase
 {
     private CartInstance $cart;
+
     private ArrayDriver $driver;
+
     private PriceResolver $resolver;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->driver = new ArrayDriver();
+        $this->driver = new ArrayDriver;
         $this->resolver = $this->createFakeResolver(1000);
         $this->cart = new CartInstance('default', $this->driver, $this->resolver);
         $this->cart->setEventsEnabled(false);
@@ -248,7 +250,8 @@ class CartInstanceTest extends TestCase
 
     private function createFakeResolver(int $price): PriceResolver
     {
-        return new class($price) implements PriceResolver {
+        return new class($price) implements PriceResolver
+        {
             public function __construct(private int $price) {}
 
             public function resolve(CartItem $item, CartContext $context): ResolvedPrice
@@ -262,6 +265,7 @@ class CartInstanceTest extends TestCase
                 foreach ($items as $item) {
                     $results[$item->rowId] = new ResolvedPrice($this->price, $this->price);
                 }
+
                 return $results;
             }
         };
