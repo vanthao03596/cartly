@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-01-16
+
+### Changed
+
+- **Refactor**: Simplify `StorageDriver` binding to use config-based resolution with container
+- **Refactor**: Remove unnecessary null check in `CartManager` auto-associate logic
+- **Refactor**: Simplify `toJson()` method in `CartContent`
+- **Refactor**: Use `in_array()` for condition filtering in `CartInstance`
+
+### Fixed
+
+- **Deps**: Update PHPUnit version constraint to `^10.1|^11.0` for `<source>` element support
+- **Deps**: Update Laravel Pint version constraint to `^1.18` to support PHP 8.1
+
+### Added
+
+- **Tooling**: Add Laravel Pint for code formatting
+
 ## [1.1.0] - 2026-01-16
 
 ### Changed
