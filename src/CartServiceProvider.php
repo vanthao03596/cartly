@@ -59,12 +59,12 @@ class CartServiceProvider extends ServiceProvider
         // Publish config
         $this->publishes([
             __DIR__.'/../config/cart.php' => config_path('cart.php'),
-        ], 'cart-config');
+        ], 'config');
 
         // Publish migrations
         $this->publishes([
             __DIR__.'/../database/migrations/' => database_path('migrations'),
-        ], 'cart-migrations');
+        ], 'migrations');
 
         // Register login event listener for cart merge
         $this->registerLoginListener();

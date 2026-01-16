@@ -63,6 +63,7 @@ class CartItemCollection extends Collection
      */
     public function groupByBuyableType(): Collection
     {
+        /** @var Collection<string, static> */
         return $this->groupBy(fn (CartItem $item) => $item->buyableType);
     }
 

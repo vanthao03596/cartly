@@ -13,10 +13,8 @@ use Cart\Contracts\Priceable;
  * Implements both Buyable and Priceable interfaces.
  *
  * @mixin \Illuminate\Database\Eloquent\Model
- *
- * @phpstan-ignore trait.unused
  */
-trait CanBeBought
+trait CanBeBought // @phpstan-ignore trait.unused
 {
     /**
      * Get the identifier of the buyable item.

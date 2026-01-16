@@ -178,7 +178,8 @@ class CartItem
         if ($this->modelLoadingCallback !== null) {
             ($this->modelLoadingCallback)();
 
-            // Check if model was loaded by batch
+            // Check if model was loaded by batch (callback may set buyableModel)
+            /** @phpstan-ignore-next-line */
             if ($this->buyableModel !== null) {
                 return $this->buyableModel;
             }
