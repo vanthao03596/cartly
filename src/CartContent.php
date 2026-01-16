@@ -187,9 +187,7 @@ class CartContent
      */
     public function toJson(): string
     {
-        $json = json_encode($this->toArray(), JSON_THROW_ON_ERROR);
-
-        return $json;
+        return json_encode($this->toArray(), JSON_THROW_ON_ERROR);
     }
 
     /**

@@ -388,7 +388,7 @@ class CartInstance
     protected function createCalculationPipeline(): CalculationPipeline
     {
         $conditions = $this->getEffectiveConditions()
-            ->filter(fn (Condition $c) => $c->getTarget() === 'subtotal' || $c->getTarget() === 'total');
+            ->filter(fn (Condition $c) => in_array($c->getTarget(), ['subtotal', 'total'], true));
 
         return CalculationPipeline::make()->through($conditions);
     }

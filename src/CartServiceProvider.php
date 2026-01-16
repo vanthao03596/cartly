@@ -6,7 +6,6 @@ namespace Cart;
 
 use Cart\Contracts\PriceResolver;
 use Cart\Contracts\StorageDriver;
-use Cart\Drivers\SessionDriver;
 use Cart\Resolvers\BuyablePriceResolver;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Event;
@@ -33,17 +32,12 @@ class CartServiceProvider extends ServiceProvider
         // Alias for easier access
         $this->app->alias(CartManager::class, 'cart');
 
-        // Bind contracts to default implementations
+        // Bind contracts to default implementations using config-based resolution
         $this->app->bind(StorageDriver::class, function () {
-            $driver = config('cart.driver', 'session');
+            $driverName = config('cart.driver', 'session');
+            $driverClass = config("cart.drivers.{$driverName}.class", Drivers\SessionDriver::class);
 
-            return match ($driver) {
-                'session' => new Drivers\SessionDriver,
-                'database' => new Drivers\DatabaseDriver,
-                'cache' => new Drivers\CacheDriver,
-                'array' => new Drivers\ArrayDriver,
-                default => new SessionDriver,
-            };
+            return $this->app->make($driverClass);
         });
 
         $this->app->bind(PriceResolver::class, function () {

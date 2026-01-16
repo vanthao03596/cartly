@@ -75,10 +75,7 @@ class CartManager
 
         // Auto-associate current user if enabled
         if (config('cart.associate.auto_associate', true)) {
-            $user = Auth::user();
-            if ($user !== null) {
-                $this->user = $user;
-            }
+            $this->user = Auth::user();
         }
     }
 
