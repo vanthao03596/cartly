@@ -34,6 +34,7 @@ Events can be enabled/disabled in config:
 | `CartCleared` | After cart cleared | No |
 | `CartConditionAdded` | After condition added | No |
 | `CartConditionRemoved` | After condition removed | No |
+| `CartConditionInvalidated` | After condition auto-removed due to validation | No |
 | `CartMerging` | Before carts merged | Yes |
 | `CartMerged` | After carts merged | No |
 
@@ -245,6 +246,35 @@ class CartConditionRemoved
     public string $instance;
     public Condition $condition;
 }
+```
+
+### CartConditionInvalidated
+
+Dispatched when a condition is automatically removed because it failed validation.
+
+```php
+use Cart\Events\CartConditionInvalidated;
+
+class CartConditionInvalidated
+{
+    public string $instance;
+    public Condition $condition;
+    public ?string $reason;  // Debug message (not for end-user display)
+}
+```
+
+**Example:**
+```php
+Event::listen(CartConditionInvalidated::class, function (CartConditionInvalidated $event) {
+    Log::warning('Condition auto-removed', [
+        'instance' => $event->instance,
+        'condition' => $event->condition->getName(),
+        'reason' => $event->reason,
+    ]);
+
+    // Notify user that their coupon was removed
+    session()->flash('warning', "Coupon '{$event->condition->getName()}' is no longer valid.");
+});
 ```
 
 ### CartMerging

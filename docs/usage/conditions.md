@@ -362,6 +362,82 @@ if ($subtotal < $freeShippingThreshold) {
 }
 ```
 
+## Condition Validation
+
+Conditions can validate themselves against the cart state. Invalid conditions are automatically removed when the cart loads from storage.
+
+### How It Works
+
+Each condition implements `isValid()` method. For example, `DiscountCondition` validates that the cart subtotal meets the minimum order requirement:
+
+```php
+// Add discount with $50 minimum order
+Cart::condition(new DiscountCondition(
+    name: 'SUMMER2024',
+    value: 10,
+    mode: 'percentage',
+    minOrderAmount: 5000  // $50 minimum
+));
+
+// Later, if cart subtotal drops below $50...
+// The discount is automatically removed on next cart load
+```
+
+### Configuration
+
+Control auto-removal behavior in config:
+
+```php
+// config/cart.php
+'conditions' => [
+    'auto_remove_invalid' => true,  // Default: true
+],
+```
+
+Set to `false` to keep invalid conditions (they simply won't apply).
+
+### Event
+
+When a condition is invalidated, `CartConditionInvalidated` event is dispatched:
+
+```php
+use Cart\Events\CartConditionInvalidated;
+
+Event::listen(CartConditionInvalidated::class, function ($event) {
+    Log::info('Condition invalidated', [
+        'instance' => $event->instance,
+        'condition' => $event->condition->getName(),
+        'reason' => $event->reason,  // Debug message
+    ]);
+});
+```
+
+### Custom Validation
+
+When creating custom conditions, override `isValid()`:
+
+```php
+use Cart\Conditions\BaseCondition;
+use Cart\CartInstance;
+
+class TimeBasedDiscount extends BaseCondition
+{
+    protected \DateTimeInterface $expiresAt;
+
+    public function isValid(?CartInstance $cart = null): bool
+    {
+        $this->validationError = null;
+
+        if (now()->isAfter($this->expiresAt)) {
+            $this->setValidationError('Discount has expired');
+            return false;
+        }
+
+        return true;
+    }
+}
+```
+
 ## Next Steps
 
 - [User Association](user-association.md) - Handle logged-in users

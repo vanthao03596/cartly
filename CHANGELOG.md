@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-01-17
+
+### Added
+
+- **Feature**: Condition validation system - conditions can validate themselves against cart state
+  - `Condition::isValid(?CartInstance $cart)` method to check if condition is still valid
+  - `Condition::getValidationError()` method to get validation error message (for logging/debugging)
+  - `DiscountCondition` validates `minOrderAmount` against cart subtotal
+  - Invalid conditions are automatically removed when cart loads from storage
+  - New `CartConditionInvalidated` event dispatched when a condition is auto-removed
+  - New config option `cart.conditions.auto_remove_invalid` (default: `true`)
+
+### Changed
+
+- `Condition` interface now requires `isValid()` and `getValidationError()` methods
+- Custom conditions extending `BaseCondition` will work without changes
+- Custom conditions implementing `Condition` directly must add these two methods
+
 ## [1.1.2] - 2026-01-17
 
 ### Fixed

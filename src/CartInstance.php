@@ -12,6 +12,7 @@ use Cart\Contracts\StorageDriver;
 use Cart\Events\CartCleared;
 use Cart\Events\CartClearing;
 use Cart\Events\CartConditionAdded;
+use Cart\Events\CartConditionInvalidated;
 use Cart\Events\CartConditionRemoved;
 use Cart\Events\CartItemAdded;
 use Cart\Events\CartItemAdding;
@@ -74,6 +75,11 @@ class CartInstance
      * Whether events are enabled.
      */
     protected bool $eventsEnabled = true;
+
+    /**
+     * Whether conditions have been validated for this request.
+     */
+    protected bool $conditionsValidated = false;
 
     public function __construct(
         string $instanceName,
@@ -577,6 +583,7 @@ class CartInstance
     {
         $this->driver = $driver;
         $this->content = null; // Clear cached content
+        $this->conditionsValidated = false;
 
         return $this;
     }
@@ -600,6 +607,7 @@ class CartInstance
         $this->user = $user;
         $this->identifier = 'user_'.$user->getAuthIdentifier();
         $this->content = null; // Reload content for new identifier
+        $this->conditionsValidated = false;
 
         return $this;
     }
@@ -611,6 +619,7 @@ class CartInstance
     {
         $this->identifier = $identifier;
         $this->content = null;
+        $this->conditionsValidated = false;
 
         return $this;
     }
@@ -672,6 +681,9 @@ class CartInstance
     protected function getContent(): CartContent
     {
         if ($this->content === null) {
+            // IMPORTANT: Assign content BEFORE validateConditions() to prevent circular calls.
+            // validateConditions() -> isValid() -> subtotal() -> getContent()
+            // Without this order, an infinite loop would occur.
             $this->content = $this->driver->get($this->instanceName, $this->identifier)
                 ?? new CartContent;
 
@@ -680,9 +692,59 @@ class CartInstance
                 $item->setPriceResolutionCallback(fn () => $this->resolvePrices());
                 $item->setModelLoadingCallback(fn () => $this->loadModels());
             }
+
+            // Validate conditions after loading from storage
+            $this->validateConditions();
         }
 
         return $this->content;
+    }
+
+    /**
+     * Validate all conditions and remove invalid ones.
+     *
+     * @return array<string, Condition> Array of invalidated conditions keyed by name
+     */
+    protected function validateConditions(): array
+    {
+        if ($this->conditionsValidated) {
+            return [];
+        }
+
+        $this->conditionsValidated = true;
+
+        if (! config('cart.conditions.auto_remove_invalid', true)) {
+            return [];
+        }
+
+        $content = $this->content;
+        if ($content === null || $content->conditions->isEmpty()) {
+            return [];
+        }
+
+        $invalidated = [];
+
+        foreach ($content->conditions as $name => $condition) {
+            if (! $condition->isValid($this)) {
+                $invalidated[$name] = $condition;
+            }
+        }
+
+        foreach ($invalidated as $name => $condition) {
+            $content->removeCondition($name);
+
+            $this->dispatchEvent(new CartConditionInvalidated(
+                $this->instanceName,
+                $condition,
+                $condition->getValidationError()
+            ));
+        }
+
+        if (! empty($invalidated)) {
+            $this->saveContent();
+        }
+
+        return $invalidated;
     }
 
     /**

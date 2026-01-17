@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Cart\Conditions;
 
+use Cart\CartInstance;
+
 /**
  * Discount condition supporting both percentage and fixed discounts.
  */
@@ -127,7 +129,9 @@ class DiscountCondition extends BaseCondition
      */
     public function getCalculatedValue(int $baseValueCents): int
     {
-        // Check minimum order requirement
+        // Defensive check: minOrderAmount is also validated in isValid(), but we check here
+        // too in case getCalculatedValue() is called without prior validation.
+        // This ensures no discount is applied if minimum order is not met.
         if ($this->minOrderAmount !== null && $baseValueCents < $this->minOrderAmount) {
             return 0;
         }
@@ -166,5 +170,32 @@ class DiscountCondition extends BaseCondition
             maxAmount: $attrs['maxAmount'] ?? null,
             minOrderAmount: $attrs['minOrderAmount'] ?? null,
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isValid(?CartInstance $cart = null): bool
+    {
+        $this->validationError = null;
+
+        if ($cart === null || $this->minOrderAmount === null) {
+            return true;
+        }
+
+        $subtotal = $cart->subtotal();
+
+        if ($subtotal < $this->minOrderAmount) {
+            $this->setValidationError(sprintf(
+                'Discount "%s" requires minimum order of %d cents, current subtotal is %d cents',
+                $this->name,
+                $this->minOrderAmount,
+                $subtotal
+            ));
+
+            return false;
+        }
+
+        return true;
     }
 }

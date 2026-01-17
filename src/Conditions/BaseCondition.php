@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cart\Conditions;
 
+use Cart\CartInstance;
 use Cart\Contracts\Condition;
 
 /**
@@ -37,6 +38,11 @@ abstract class BaseCondition implements Condition
      * @var array<string, mixed>
      */
     protected array $attributes = [];
+
+    /**
+     * The validation error message if the condition is invalid.
+     */
+    protected ?string $validationError = null;
 
     /**
      * @param  string  $name  Unique name for this condition
@@ -143,5 +149,31 @@ abstract class BaseCondition implements Condition
         }
 
         return $instance;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isValid(?CartInstance $cart = null): bool
+    {
+        $this->validationError = null;
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValidationError(): ?string
+    {
+        return $this->validationError;
+    }
+
+    /**
+     * Set a validation error message.
+     */
+    protected function setValidationError(string $message): void
+    {
+        $this->validationError = $message;
     }
 }
